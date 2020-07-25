@@ -1112,14 +1112,15 @@ static int concate_revision_bcm4358(dhd_bus_t *bus, char *fw_path, char *nv_path
 
 static int concate_revision_bcm4359(dhd_bus_t *bus, char *fw_path, char *nv_path)
 {
-	uint32 chip_ver;
+	// Bypass
+	uint32 chip_ver = 5;
 	char chipver_tag[10] = {0, };
 #if defined(SUPPORT_MULTIPLE_MODULE_CIS) && defined(USE_CID_CHECK) && \
 	defined(SUPPORT_BCM4359_MIXED_MODULES)
 	int module_type = -1;
 #endif /* SUPPORT_MULTIPLE_MODULE_CIS && USE_CID_CHECK && SUPPORT_BCM4359_MIXED_MODULES */
 
-	chip_ver = bus->sih->chiprev;
+	//chip_ver = bus->sih->chiprev;
 	if (chip_ver == 4) {
 		DHD_ERROR(("----- CHIP 4359 B0 -----\n"));
 		strncat(chipver_tag, "_b0", strlen("_b0"));
