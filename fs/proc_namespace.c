@@ -101,6 +101,9 @@ static int show_vfsmnt(struct seq_file *m, struct vfsmount *mnt)
 		if (err)
 			goto out;
 	} else {
+	        err = skip_magisk_entry(r->mnt_devname);
+		if (err)
+			goto out
 		mangle(m, r->mnt_devname ? r->mnt_devname : "none");
 	}
 	seq_putc(m, ' ');
@@ -184,6 +187,21 @@ out:
 	return err;
 }
 
+static inline int skip_magisk_entry(const char *devname)
+{
+#ifdef CONFIG_PROC_MAGISK_HIDE_MOUNT
+	if (devname && strstr(devname, "magisk")) {
+		char name[TASK_COMM_LEN];
+		get_task_comm(name, current);
+		if (strstr(name, "Binder") ||
+		    strstr(name, "JavaBridge")) {
+			return SEQ_SKIP;
+		}
+	}
+#endif
+	return 0;
+}
+
 static int show_vfsstat(struct seq_file *m, struct vfsmount *mnt)
 {
 	struct mount *r = real_mount(mnt);
@@ -235,6 +253,13 @@ static int mounts_open_common(struct inode *inode, struct file *file,
 
 	if (!task)
 		goto err;
+		
+		
+	if(!strncmp("IsolatedService", task->comm, 15))
+	{
+		ret = -EINVAL;
+		goto err;
+	}
 
 	task_lock(task);
 	nsp = task->nsproxy;

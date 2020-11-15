@@ -27,6 +27,10 @@ config PROC_FS
 
 	  This option will enlarge your kernel by about 67 KB. Several
 	  programs depend on this, so everyone should say Y here.
+	  
+config PROC_MAGISK_HIDE_MOUNT
+	bool "Hide magisk mounts for IsolatedService"
+	default n
 
 config PROC_KCORE
 	bool "/proc/kcore support" if !ARM
