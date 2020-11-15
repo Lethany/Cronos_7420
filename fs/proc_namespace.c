@@ -254,7 +254,6 @@ static int mounts_open_common(struct inode *inode, struct file *file,
 	if (!task)
 		goto err;
 		
-		
 	if(!strncmp("IsolatedService", task->comm, 15))
 	{
 		ret = -EINVAL;
